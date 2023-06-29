@@ -1,9 +1,9 @@
-import { Logo } from './components/Logo'
+import { Header } from './components/header'
 
 function App() {
   return (
     <div>
-      <Logo />
+       <Header />
     </div>
   )
 }
