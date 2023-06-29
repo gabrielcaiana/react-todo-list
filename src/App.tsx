@@ -1,5 +1,11 @@
+import { Logo } from './components/Logo'
+
 function App() {
-  return <>hello world</>
+  return (
+    <div>
+      <Logo />
+    </div>
+  )
 }
 
 export default App
