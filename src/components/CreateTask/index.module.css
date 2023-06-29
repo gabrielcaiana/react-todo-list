@@ -1,0 +1,47 @@
+.createTask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: -25px;
+}
+
+.createTask input {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--gray-700);
+  background: var(--gray-500);
+  color: var(--gray-100);
+  width: 638px;
+}
+
+.createTask input::placeholder {
+  color: var(-gray-300);
+  font-size: 1rem;
+}
+
+.createTask button {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--blue-dark);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 140%;
+  color: var(--gray-100);
+  transition: all 300ms;
+  border: 0;
+  cursor: pointer;
+}
+
+.createTask button:hover {
+  background-color: var(--blue);
+
+}
+
+.createTask button svg {
+  color: var(--gray-100);
+}

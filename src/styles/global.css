@@ -13,6 +13,11 @@
   --danger: #E25858;
 }
 
+*:focus {
+  outline: none;
+}
+
+
 html, body {
   font-family: 'Inter', sans-serif;
   background-color: var(--gray-600);
