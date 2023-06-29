@@ -1,4 +1,4 @@
-import { Logo } from "../base/Logo";
+import { Logo } from "../Logo";
 import styles from './index.module.css'
 
 export function Header() {

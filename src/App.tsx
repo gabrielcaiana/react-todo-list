@@ -5,7 +5,9 @@ function App() {
   return (
     <div>
        <Header />
+       <main className="container">
        <CreateTask />
+       </main>
     </div>
   )
 }
