@@ -1,13 +1,13 @@
-import { CreateTask } from './components/CreateTask'
+import { ListTasks } from './components/ListTasks'
 import { Header } from './components/header'
 
 function App() {
   return (
     <div>
-       <Header />
-       <main className="container">
-       <CreateTask />
-       </main>
+      <Header />
+      <main className="container">
+        <ListTasks />
+      </main>
     </div>
   )
 }
