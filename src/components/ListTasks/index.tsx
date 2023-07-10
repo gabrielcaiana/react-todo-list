@@ -33,23 +33,23 @@ export function ListTasks() {
     },
   ])
 
-  const countTasks = () => tasks.length
+  const countTasks = (): number => tasks.length
 
-  const countTasksCompleted = () =>
-    tasks.filter((task) => task.completed).length
+  const countTasksCompleted = (): number =>
+    tasks.reduce((acc, task) => (task.completed ? ++acc : acc), 0)
 
-  const handleCreateTask = (event: any) => {
+  const handleCreateTask = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const newTask = {
+    const newTask: Task = {
       id: Math.random(),
-      title: event.target.inputTask.value,
+      title: event.currentTarget.inputTask.value,
       completed: false,
     }
 
     setTasks([...tasks, newTask])
 
-    event.target.inputTask.value = ''
+    event.currentTarget.inputTask.value = ''
   }
 
   const handleDeleteTask = (id: number) => {
