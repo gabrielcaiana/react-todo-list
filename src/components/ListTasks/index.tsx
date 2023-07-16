@@ -12,26 +12,10 @@ interface Task {
 }
 
 export function ListTasks() {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 1,
-      title:
-        'Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer 1.',
-      completed: false,
-    },
-    {
-      id: 2,
-      title:
-        'Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer 2.',
-      completed: true,
-    },
-    {
-      id: 3,
-      title:
-        'Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer 3.',
-      completed: true,
-    },
-  ])
+  const storedTasks = window.localStorage.getItem('todo-tasks')
+  const initialTasks: Task[] = storedTasks ? JSON.parse(storedTasks) : []
+
+  const [tasks, setTasks] = useState<Task[]>(initialTasks)
 
   const countTasks = (): number => tasks.length
 
@@ -49,19 +33,33 @@ export function ListTasks() {
 
     setTasks([...tasks, newTask])
 
+    window.localStorage.setItem(
+      'todo-tasks',
+      JSON.stringify([...tasks, newTask])
+    )
+
     event.currentTarget.inputTask.value = ''
   }
 
   const handleDeleteTask = (id: number) => {
-    setTasks(tasks.filter((task) => task.id !== id))
+    const newTasks = tasks.filter((task) => task.id !== id)
+
+    setTasks(newTasks)
+
+    window.localStorage.setItem('todo-tasks', JSON.stringify(newTasks))
   }
 
   const handleCompleteTask = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    )
+    const updateTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, completed: !task.completed }
+      }
+      return task
+    })
+
+    setTasks(updateTasks)
+
+    window.localStorage.setItem('todo-tasks', JSON.stringify(updateTasks))
   }
 
   return (
