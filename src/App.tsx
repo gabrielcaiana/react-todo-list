@@ -1,15 +1,14 @@
-import { ListTasks } from './components/ListTasks'
-import { Header } from './components/header'
+import { ListTasks } from './components/ListTasks';
+import { Header } from './components/AppHeader';
 
-function App() {
+export function App() {
+
   return (
     <div>
       <Header />
       <main className="container">
-        <ListTasks />
+          <ListTasks  />
       </main>
     </div>
-  )
+  );
 }
-
-export default App
