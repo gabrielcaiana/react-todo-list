@@ -1,66 +1,76 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import { EmptyState } from '../EmptyState'
 import { Task } from '../Task'
 
 import { PlusCircle } from '@phosphor-icons/react'
-
-interface Task {
-  id: number
-  title: string
-  completed: boolean
-}
+import { Todo } from '../../types'
+import { TodoService } from '../../services/api/todo'
 
 export function ListTasks() {
-  const storedTasks = window.localStorage.getItem('todo-tasks')
-  const initialTasks: Task[] = storedTasks ? JSON.parse(storedTasks) : []
+  const todoService = new TodoService()
 
-  const [tasks, setTasks] = useState<Task[]>(initialTasks)
+  const [todos, setTodos] = useState<Todo[]>([])
 
-  const countTasks = (): number => tasks.length
+  const countTasks = (): number => todos.length
 
   const countTasksCompleted = (): number =>
-    tasks.reduce((acc, task) => (task.completed ? ++acc : acc), 0)
+    todos.reduce((acc, task) => (task.completed ? ++acc : acc), 0)
 
-  const handleCreateTask = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateTask = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const newTask: Task = {
-      id: Math.random(),
-      title: event.currentTarget.inputTask.value,
+    const input = event.currentTarget.inputTask
+
+    const newTodo = {
+      title: input.value,
       completed: false,
     }
 
-    setTasks([...tasks, newTask])
+    try {
+      await todoService.createTodo(newTodo.title, newTodo.completed);
+      await fetchData();
 
-    window.localStorage.setItem(
-      'todo-tasks',
-      JSON.stringify([...tasks, newTask])
-    )
-
-    event.currentTarget.inputTask.value = ''
+      input.value = '';
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  const handleDeleteTask = (id: number) => {
-    const newTasks = tasks.filter((task) => task.id !== id)
-
-    setTasks(newTasks)
-
-    window.localStorage.setItem('todo-tasks', JSON.stringify(newTasks))
+  const handleDeleteTask = async (id: number) => {
+    try {
+      await todoService.deleteTodoById(id);
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  const handleCompleteTask = (id: number) => {
-    const updateTasks = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, completed: !task.completed }
+  const handleCompleteTask = async (id: number) => {
+    try {
+      const todo = todos.find(todo => todo.id === id);
+
+      if(todo) {
+        await todoService.updateTodo(id, { completed: !todo.completed });
+        await fetchData()
       }
-      return task
-    })
-
-    setTasks(updateTasks)
-
-    window.localStorage.setItem('todo-tasks', JSON.stringify(updateTasks))
+    } catch (e) {
+      console.error(e);
+    }
   }
+
+  const fetchData = async () => {
+    try {
+      const result = await todoService.getTodos();
+      setTodos(result);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -96,10 +106,10 @@ export function ListTasks() {
             <EmptyState />
           ) : (
             <div>
-              {tasks.map((task, index) => (
+              {todos.map(todo => (
                 <Task
-                  key={index}
-                  {...task}
+                  key={todo.id}
+                  {...todo}
                   onDelete={handleDeleteTask}
                   onCompleted={handleCompleteTask}
                 />

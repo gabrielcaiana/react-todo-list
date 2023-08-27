@@ -1,10 +1,8 @@
+import { Todo } from '../../types'
 import styles from './index.module.css'
 import { Trash } from '@phosphor-icons/react'
 
-interface TaskProps {
-  title: string
-  id: number
-  completed: boolean
+interface TaskProps extends Todo {
   onDelete: any
   onCompleted: any
 }
